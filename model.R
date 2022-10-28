@@ -6,7 +6,7 @@
 library(tidyverse)
 library(lubridate)
 
-setwd("C:/Users/Henri/OneDrive - University of Cape Town/ECO4053S/ERPPuzzle")
+#setwd("C:/Users/Henri/OneDrive - University of Cape Town/ECO4053S/ERPPuzzle")
 JSE <- read_csv("JSE_ALSH.csv")
 dates <- apply(JSE[,1], 2, mdy)
 dates <- as.Date(dates, origin='1970-01-01')
@@ -57,3 +57,23 @@ rf <- mean(RF$Price)/100
 
 # Equity risk premium
 ERP <- ri - rf
+
+
+#--------------------------
+
+library(readxl)
+ct <- read_xlsx("ct.xlsx")
+
+
+ct.vector <-as.data.frame(ct[5:29,])
+ct.vector <-ct.vector[order(ct.vector$year, decreasing = TRUE),] 
+
+ri.vector<-as.data.frame(JSE.y[4:28,c(1,5)])
+
+
+ln.ct <-log(ct.vector$growth) 
+R <-ri.vector$Return+1
+
+gamma <- (ri - rf)/cov(ln.ct,R)
+
+
