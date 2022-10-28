@@ -3,11 +3,50 @@
 # Calculate risk premium
 # Compare to theoretical analysis
 
+library(tidyverse)
+library(lubridate)
 
 setwd("C:/Users/Henri/OneDrive - University of Cape Town/ECO4053S/ERPPuzzle")
+JSE <- read_csv("JSE_ALSH.csv")
+dates <- apply(JSE[,1], 2, mdy)
+dates <- as.Date(dates, origin='1970-01-01')
+JSE$Date <- dates
 
-JSE <- read_csv("JSE_ASLH.csv")
-JSE <- read_csv("JSE_ALSH.csv", show_col_types = F)
-JSE.d <- JSE[,'Close'] - JSE[,'Open']
-JSE.r
 head(JSE)
+
+plot(x = JSE$Date[1:1000],
+     y = JSE$Close[1:1000],
+     type = "l",
+     xlab = "Date",
+     ylab = "Closing Price",
+     main = "JSE All Share",
+     ylim = c(30000, 80000))
+
+# Daily returns
+JSE.d <- (JSE$Close - JSE$Open)/JSE$Open
+
+# Yearly returns
+year = 2022
+closing = cbind(as.character(JSE$Date[1]), JSE$Close[1])
+opening = NULL
+for (i in 1:nrow(JSE)){
+  if(JSE$Date[i] < as.Date(paste(year, '-01-01', sep = ""))){
+    opening <- rbind(opening,
+                     c(as.character(JSE$Date[i-1]),JSE$Open[i-1]))
+    closing <- rbind(closing,
+                     c(as.character(JSE$Date[i]),JSE$Close[i]))
+    year <- year - 1
+  }
+}
+opening <- rbind(opening,
+                 c(as.character(JSE$Date[6976]),JSE$Open[6976]))
+
+
+JSE.y <- as.data.frame(cbind(opening, closing))
+colnames(JSE.y) <- c("Start", "Open", "End", "Close")
+JSE.y$Open <- as.numeric(JSE.y$Open)
+JSE.y$Close <- as.numeric(JSE.y$Close)
+
+Return <- (JSE.y$Close - JSE.y$Open) / JSE.y$Open
+JSE.y <- cbind(JSE.y, Return)
+mean(JSE.y$Return[2:27])
