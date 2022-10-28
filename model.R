@@ -49,4 +49,11 @@ JSE.y$Close <- as.numeric(JSE.y$Close)
 
 Return <- (JSE.y$Close - JSE.y$Open) / JSE.y$Open
 JSE.y <- cbind(JSE.y, Return)
-mean(JSE.y$Return[2:27])
+ri <- mean(JSE.y$Return[2:27])
+
+# Risk free
+RF <- read_csv(file = "RISK_FREE.csv")
+rf <- mean(RF$Price)/100
+
+# Equity risk premium
+ERP <- ri - rf
