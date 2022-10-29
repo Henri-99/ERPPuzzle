@@ -61,19 +61,56 @@ ERP <- ri - rf
 
 #--------------------------
 
-library(readxl)
-ct <- read_xlsx("ct.xlsx")
+# library(readxl)
+# ct <- read_xlsx("ct.xlsx", sheet = "Sheet1")
+# 
+# 
+# ct.vector <-as.data.frame(ct[5:29,])
+# ct.vector <-ct.vector[order(ct.vector$year, decreasing = TRUE),] 
+# 
+# ri.vector<-as.data.frame(JSE.y[4:28,c(1,5)])
+# 
+# 
+# ln.ct <-log(ct.vector$congrowth) 
+# R <-ri.vector$Return+1
+# 
+# gamma <- (ri - rf)/cov(ln.ct,R)
+
+#-----------------------------------
+
+ct <- read_xlsx("ct.xlsx", sheet = "Sheet2")
 
 
-ct.vector <-as.data.frame(ct[5:29,])
-ct.vector <-ct.vector[order(ct.vector$year, decreasing = TRUE),] 
-
-ri.vector<-as.data.frame(JSE.y[4:28,c(1,5)])
+ct.vector <-as.data.frame(ct[6:29,])
+ct.vector <-ct.vector[order(ct.vector$year, decreasing = TRUE),] #consumption growth| 1995-2018
 
 
-ln.ct <-log(ct.vector$growth) 
+ri.vector<-as.data.frame(JSE.y[5:28,c(1,5)]) #return on equity | 1995-2018 
+
+
+ln.ct <-log(ct.vector$congrowth) 
 R <-ri.vector$Return+1
 
 gamma <- (ri - rf)/cov(ln.ct,R)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
